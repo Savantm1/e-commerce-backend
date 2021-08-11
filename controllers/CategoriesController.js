@@ -1,4 +1,3 @@
-const { Sequelize } = require("sequelize");
 const { Categories, Product } = require("../models/models");
 
 class ProductCategoriesController {

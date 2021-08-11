@@ -18,7 +18,7 @@ class ProductController {
     page = page || 1;
     limit = limit || 9;
     let offset = page * limit - limit;
-    let data = {};  
+    let data = {};
     // получение всех продуктов
     if (!categoryId && bestFromFarmers == "false" && bestSelling == "false") {
       let products = await Product.findAll({
@@ -32,7 +32,7 @@ class ProductController {
       data.count = count;
       data.categoryId = products[0].categoryId;
       data.products = products;
-    } 
+    }
     // получение всех продуктов подкатегорий bestSelling and bestFromFarmers
     else if (
       !categoryId &&
@@ -42,34 +42,35 @@ class ProductController {
       let products = await Product.findAll({
         include: [{ model: Pictures }, { model: Categories }],
         where: {
-          [Op.or]:[{bestSelling: true},{bestFromFarmers: true}]},
+          [Op.or]: [{ bestSelling: true }, { bestFromFarmers: true }],
+        },
         limit,
         offset,
       });
       let count = await Product.count({
         raw: true,
         where: {
-          [Op.or]:[{bestSelling: true},{bestFromFarmers: true}]}
+          [Op.or]: [{ bestSelling: true }, { bestFromFarmers: true }],
+        },
       });
       data.count = count;
       data.categoryId = products[0].categoryId;
       data.products = products;
-      
-    } 
+    }
     // получение всех продуктов определенной категории
     else if (
       categoryId &&
       bestSelling == "false" &&
       bestFromFarmers == "false"
     ) {
-      console.log( categoryId, bestSelling, bestFromFarmers, limit, page)
+      console.log(categoryId, bestSelling, bestFromFarmers, limit, page);
       let products = await Product.findAll({
         where: { categoryId: categoryId },
         include: [{ model: Pictures }, { model: Categories }],
         limit,
         offset,
       });
-      console.log('products',products)
+      console.log("products", products);
 
       let count = await Product.count({
         raw: true,
@@ -81,8 +82,8 @@ class ProductController {
       data.categoryName = products[0].category.category_name;
       data.categoryId = products[0].categoryId;
       data.products = products;
-      console.log(data)
-    } 
+      console.log(data);
+    }
     // получение всех продуктов определенной категории подкатегории bestSelling
     else if (
       categoryId &&
@@ -108,7 +109,7 @@ class ProductController {
       data.categoryName = products[0].category.category_name;
       data.categoryId = products[0].categoryId;
       data.products = products;
-    } 
+    }
     // получение всех продуктов определенной категории подкатегории bestFromFarmers
     else if (
       categoryId &&
@@ -136,11 +137,7 @@ class ProductController {
       data.products = products;
     }
     // получение всех продуктов определенной категории подкатегорий bestSelling и bestFromFarmers
-    else if (
-      categoryId &&
-      bestSelling == "true" &&
-      bestFromFarmers == "true"
-    ) {
+    else if (categoryId && bestSelling == "true" && bestFromFarmers == "true") {
       let products = await Product.findAll({
         where: {
           [Op.or]: [
